@@ -71,7 +71,7 @@
       "csp": null
     },
     "updater": {
-      "active": true,
+      "active": false,
       "dialog": true,
       "endpoints": [
         "https://raw.githubusercontent.com/sandunwira/TauriUpdater/main/twitchbox.json"
