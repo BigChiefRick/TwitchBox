@@ -35,6 +35,16 @@ fn main() {
 		// DISABLE MIDDLE-CLICK TO OPEN LINKS IN NEW WINDOWS ===================================== //
 		main_window.eval("window.addEventListener('auxclick', function(e) {if (e.button == 1) { e.preventDefault(); }});").unwrap();
 		// RIGHT CLICK ENABLED for Stream Manager mod tools
+
+		// LOAD FRANKERFACEZ ==================================================================== //
+		main_window.eval(r#"
+			(function() {
+				var script = document.createElement('script');
+				script.src = 'https://cdn.frankerfacez.com/script/frankerfacez.min.js';
+				document.head.appendChild(script);
+			})();
+		"#).unwrap();
+
 		Ok(())
 	})
 	.plugin(tauri_plugin_window_state::Builder::default().build())
