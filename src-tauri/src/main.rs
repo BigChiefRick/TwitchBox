@@ -14,36 +14,48 @@ struct Payload {
 fn main() {
 	tauri::Builder::default()
 	.setup(|app| {
-		let main_window = app.get_window("main").unwrap();
-
-		// DISABLE RELOAD ======================================================================== //
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.keyCode == 116) { e.preventDefault(); }});").unwrap(); // F5
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.shiftKey && e.keyCode == 82) { e.preventDefault(); }});").unwrap(); // CTRL + SHIFT + R
-		// DISABLE VIEWING SOURCE ================================================================ //
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.keyCode == 85) { e.preventDefault(); }});").unwrap(); // CTRL + U
-		// DISABLE PRINT ========================================================================= //
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.keyCode == 80) { e.preventDefault(); }});").unwrap(); // CTRL + P
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.shiftKey && e.keyCode == 80) { e.preventDefault(); }});").unwrap(); // CTRL + SHIFT + P
-		// DISABLE SCREENSHOT ==================================================================== //
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.shiftKey && e.keyCode == 83) { e.preventDefault(); }});").unwrap(); // CTRL + SHIFT + S
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.shiftKey && e.keyCode == 88) { e.preventDefault(); }});").unwrap(); // CTRL + SHIFT + X
-		// DISABLE DEVELOPER OPTIONS ============================================================= //
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.shiftKey && e.keyCode == 73) { e.preventDefault(); }});").unwrap(); // CTRL + SHIFT + I
-		// FIND IN PAGE ENABLED for Stream Manager dashboard search
-		// DISABLE CARET BROWSING ================================================================ //
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.keyCode == 118) { e.preventDefault(); }});").unwrap(); // F7
-		// DISABLE MIDDLE-CLICK TO OPEN LINKS IN NEW WINDOWS ===================================== //
-		main_window.eval("window.addEventListener('auxclick', function(e) {if (e.button == 1) { e.preventDefault(); }});").unwrap();
-		// RIGHT CLICK ENABLED for Stream Manager mod tools
-
-		// LOAD FRANKERFACEZ ==================================================================== //
-		main_window.eval(r#"
+		let main_window = tauri::WindowBuilder::new(
+			app,
+			"main",
+			tauri::WindowUrl::External("https://dashboard.twitch.tv/u/ticklefitz/stream-manager".parse().unwrap())
+		)
+		.title("TwitchBox - Stream Manager")
+		.min_inner_size(1400.0, 700.0)
+		.fullscreen(false)
+		.focused(true)
+		.resizable(true)
+		.decorations(true)
+		.center(true)
+		// Initialization scripts run at the native WebView2 level before CSP is applied,
+		// which allows loading external scripts like FFZ just like a browser extension would.
+		.initialization_script(r#"
+			// DISABLE KEYBOARD SHORTCUTS
+			window.addEventListener('keydown', function(e) {
+				if (e.keyCode == 116) e.preventDefault();                              // F5 (reload)
+				if (e.ctrlKey && e.shiftKey && e.keyCode == 82) e.preventDefault();    // CTRL+SHIFT+R (hard refresh)
+				if (e.ctrlKey && e.keyCode == 85) e.preventDefault();                  // CTRL+U (view source)
+				if (e.ctrlKey && e.keyCode == 80) e.preventDefault();                  // CTRL+P (print)
+				if (e.ctrlKey && e.shiftKey && e.keyCode == 80) e.preventDefault();    // CTRL+SHIFT+P (print setup)
+				if (e.ctrlKey && e.shiftKey && e.keyCode == 83) e.preventDefault();    // CTRL+SHIFT+S (screenshot)
+				if (e.ctrlKey && e.shiftKey && e.keyCode == 88) e.preventDefault();    // CTRL+SHIFT+X (screenshot)
+				if (e.ctrlKey && e.shiftKey && e.keyCode == 73) e.preventDefault();    // CTRL+SHIFT+I (devtools)
+				if (e.keyCode == 118) e.preventDefault();                              // F7 (caret browsing)
+			});
+			// FIND IN PAGE (CTRL+F) ENABLED for Stream Manager dashboard search
+			// RIGHT CLICK ENABLED for Stream Manager mod tools
+			window.addEventListener('auxclick', function(e) {
+				if (e.button == 1) e.preventDefault(); // middle-click
+			});
+		"#)
+		.initialization_script(r#"
+			// LOAD FRANKERFACEZ (with BTTV & 7TV add-on support)
 			(function() {
 				var script = document.createElement('script');
 				script.src = 'https://cdn.frankerfacez.com/script/frankerfacez.min.js';
 				document.head.appendChild(script);
 			})();
-		"#).unwrap();
+		"#)
+		.build()?;
 
 		Ok(())
 	})
