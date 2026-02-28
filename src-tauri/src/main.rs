@@ -29,16 +29,12 @@ fn main() {
 		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.shiftKey && e.keyCode == 88) { e.preventDefault(); }});").unwrap(); // CTRL + SHIFT + X
 		// DISABLE DEVELOPER OPTIONS ============================================================= //
 		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.shiftKey && e.keyCode == 73) { e.preventDefault(); }});").unwrap(); // CTRL + SHIFT + I
-		// DISABLE FIND IN PAGE ================================================================== //
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.keyCode == 70) { e.preventDefault(); }});").unwrap(); // CTRL + F
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.ctrlKey && e.keyCode == 71) { e.preventDefault(); }});").unwrap(); // CTRL + G
-		main_window.eval("window.addEventListener('keydown', function(e) {if (e.keyCode == 114) { e.preventDefault(); }});").unwrap(); // F3
+		// FIND IN PAGE ENABLED for Stream Manager dashboard search
 		// DISABLE CARET BROWSING ================================================================ //
 		main_window.eval("window.addEventListener('keydown', function(e) {if (e.keyCode == 118) { e.preventDefault(); }});").unwrap(); // F7
 		// DISABLE MIDDLE-CLICK TO OPEN LINKS IN NEW WINDOWS ===================================== //
 		main_window.eval("window.addEventListener('auxclick', function(e) {if (e.button == 1) { e.preventDefault(); }});").unwrap();
-		// DISABLE RIGHT CLICK =================================================================== //
-		main_window.eval("window.addEventListener('contextmenu', function(e) { e.preventDefault(); });").unwrap();
+		// RIGHT CLICK ENABLED for Stream Manager mod tools
 		Ok(())
 	})
 	.plugin(tauri_plugin_window_state::Builder::default().build())

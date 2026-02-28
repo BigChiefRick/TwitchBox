@@ -37,8 +37,8 @@
         "icons/icon.ico"
       ],
       "identifier": "com.twitchbox.app",
-      "longDescription": "An opensource Windows client for Twitch.tv",
-      "shortDescription": "An opensource Windows client for Twitch.tv",
+      "longDescription": "An opensource Windows client for Twitch.tv Stream Manager",
+      "shortDescription": "An opensource Windows client for Twitch.tv Stream Manager",
       "resources": [],
       "externalBin": [],
       "targets": "all",
@@ -83,10 +83,10 @@
     },
     "windows": [
       {
-        "title": "TwitchBox",
+        "title": "TwitchBox - Stream Manager",
         "minWidth": 1400,
         "minHeight": 700,
-        "url": "https://twitch.tv",
+        "url": "https://dashboard.twitch.tv/u/ticklefitz/stream-manager",
         "fullscreen": false,
         "focus": true,
         "resizable": true,
